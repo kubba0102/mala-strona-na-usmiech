@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mała rzecz na uśmiech</title>
+  <style>
+    :root{
+      --bg: #f7f0e7;
+      --card: #efe4d6;
+      --border: #00000014;
+      --text: #2b2621;
+      --muted: #4b433b;
+      --btn: #eadbca;
+      --btnHover: #e3d2bf;
+      --shadow: 0 18px 55px rgba(0,0,0,.10);
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 700px at 30% 20%, #fff7ef 0%, transparent 60%),
+        radial-gradient(900px 650px at 70% 70%, #f3e6d8 0%, transparent 60%),
+        var(--bg);
+      padding: 22px;
+    }
+
+    .wrap{
+      width:min(820px, 92vw);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 16px;
+    }
+
+    .start{
+      width:100%;
+      min-height: 420px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap: 14px;
+    }
+    .start h1{
+      margin:0;
+      font-size: clamp(24px, 3.8vw, 36px);
+      letter-spacing:.2px;
+      font-weight: 850;
+    }
+
+    .card{
+      width:min(560px, 92vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      text-align:center;
+
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events:none;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap: 8px;
+    }
+    .card.show{
+      opacity:1;
+      transform: translateY(0);
+      pointer-events:auto;
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .card.hide{
+      opacity:0;
+      transform: translateY(-10px);
+      transition: opacity .45s ease, transform .45s ease;
+    }
+
+    .title{
+      margin: 0;
+      font-weight: 850;
+      font-size: 18px;
+      letter-spacing:.15px;
+    }
+    .title:empty{ display:none; }
+
+    .text{
+      margin: 0;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    .nav{
+      width:min(560px, 92vw);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+    }
+    button{
+      border: 1px solid var(--border);
+      background: var(--btn);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 14px;
+      cursor:pointer;
+      font-weight: 750;
+      transition: background .15s ease, transform .06s ease;
+    }
+    button:hover{ background: var(--btnHover); }
+    button:active{ transform: translateY(1px); }
+    button:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    /* STICKER pod prostokątem */
+    .stickerWrap{
+      display:none;
+      width: 180px;
+      max-width: 60vw;
+      margin-top: 6px;
+    }
+    .stickerWrap.show{ display:block; }
+    .stickerImg{
+      width:100%;
+      display:block;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.12));
+    }
+
+    .bear{
+      width: 180px;
+      max-width: 60vw;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow:hidden;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      display:none;
+    }
+    .bear.show{ display:block; }
+    .bear img{ width:100%; display:block; }
+
+    .finalNote{
+      display:none;
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: #6b5f55;
+      text-align:center;
+      text-transform: lowercase;
+    }
+    .finalNote.show{ display:block; }
+
+    .hidden{ display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="start" id="startView">
+      <h1>Mała rzecz na uśmiech</h1>
+      <button id="startBtn">Start</button>
+    </div>
+
+    <div id="slideView" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:14px;">
+      <div class="card" id="card">
+        <h2 class="title" id="title"></h2>
+        <p class="text" id="text"></p>
+      </div>
+
+      <!-- Sticker (zmieniamy src zależnie od slajdu) -->
+      <div class="stickerWrap" id="stickerWrap" aria-label="Sticker">
+        <img class="stickerImg" id="stickerImg" src="" alt="Obrazek">
+      </div>
+
+      <div class="nav">
+        <button id="prevBtn">← Wstecz</button>
+        <button id="nextBtn">Dalej →</button>
+      </div>
+
+      <div class="bear" id="bear">
+        <img src="https://i.pinimg.com/originals/9a/75/32/9a7532b2e066d41c9940e0d5c1ad5ba6.gif" alt="Milk & Mocha">
+      </div>
+
+      <div class="finalNote" id="finalNote">
+        Jeśli to czytasz, to znaczy, że serio to wszystko przewinęłaś. Szanuję😛.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const AUTO_SECONDS = 8;
+
+    // sticker: podaj nazwę pliku PNG w folderze
+    const SLIDES = [
+      { title: "Werka", text: "Kilka zdań, żebyś mogła zacząć dzień z uśmiechem na twarzy." },
+      { title: "", text: "Choć dziś mówi się o zakochanych, miłość ma znacznie więcej niż jedną definicję…" },
+
+      // TU: misie_bez_tla.png
+      {
+        title: "",
+        text: "Dlatego walentynki są dla wszystkich, którzy kogoś mają w sercu.\nNiezależnie od formy tej miłości.",
+        sticker: "misie_bez_tla.png"
+      },
+
+      { title: "", text: "Bo kochamy ludzi nie za to, że są doskonali, ale za to, że są prawdziwi." },
+
+      // TU: misie_wyciete_bez_tla.png
+      {
+        title: "",
+        text: "W każdej relacji można odejść daleko, ale od niektórych ludzi nie da się odejść naprawdę.",
+        sticker: "misie_wyciete_bez_tla.png"
+      },
+
+      { title: "", text: "I nawet jeśli oboje jesteśmy tymi sinusoidami, \nz lepszymi i gorszymi dniami," },
+      { title: "", text: "to zawsze potrafimy wrócić do siebie w tym samym rytmie.",
+	sticker: "misie_telefony_bez_tla.png"
+	},
+
+      { title: "", text: "Czasem wystarczy po prostu być dla siebie." },
+      { title: "", text: "I to już wiele znaczy." },
+
+      { title: "Dziękuję", text: "Dlatego dziękuję, że jesteś ❤️.\nTylko tyle i aż tyle.", isFinal: true }
+    ];
+
+    const startView = document.getElementById("startView");
+    const slideView = document.getElementById("slideView");
+    const startBtn  = document.getElementById("startBtn");
+
+    const card  = document.getElementById("card");
+    const title = document.getElementById("title");
+    const text  = document.getElementById("text");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const stickerWrap = document.getElementById("stickerWrap");
+    const stickerImg  = document.getElementById("stickerImg");
+
+    const bear = document.getElementById("bear");
+    const finalNote = document.getElementById("finalNote");
+
+    let idx = 0;
+    let autoTimer = null;
+
+    function stopAuto(){
+      if(autoTimer){
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    function startAuto(){
+      stopAuto();
+      const s = SLIDES[idx];
+      if(s.isFinal) return;
+      autoTimer = setTimeout(() => {
+        if(idx < SLIDES.length - 1) animateTo(idx + 1);
+      }, AUTO_SECONDS * 1000);
+    }
+
+    function render(i){
+      const s = SLIDES[i];
+
+      title.textContent = s.title || "";
+      text.textContent = s.text;
+
+      prevBtn.disabled = (i === 0);
+
+      const isLast = !!s.isFinal || i === SLIDES.length - 1;
+
+      // Sticker per slajd
+      if(s.sticker){
+        stickerImg.src = s.sticker;
+        stickerWrap.classList.add("show");
+      } else {
+        stickerImg.src = "";
+        stickerWrap.classList.remove("show");
+      }
+
+      // GIF + notka tylko na końcu
+      bear.classList.toggle("show", isLast);
+      finalNote.classList.toggle("show", isLast);
+
+      nextBtn.textContent = isLast ? "Odpal jeszcze raz ↻" : "Dalej →";
+      nextBtn.onclick = isLast ? restart : next;
+      prevBtn.onclick = prev;
+    }
+
+    function animateTo(i){
+      stopAuto();
+
+      card.classList.remove("show");
+      card.classList.add("hide");
+
+      setTimeout(() => {
+        idx = i;
+        render(idx);
+
+        card.classList.remove("hide");
+        void card.offsetWidth;
+        card.classList.add("show");
+
+        startAuto();
+      }, 220);
+    }
+
+    function next(){
+      if(idx < SLIDES.length - 1) animateTo(idx + 1);
+    }
+
+    function prev(){
+      if(idx > 0) animateTo(idx - 1);
+    }
+
+    function startShow(){
+      startView.classList.add("hidden");
+      slideView.classList.remove("hidden");
+
+      idx = 0;
+      render(idx);
+      requestAnimationFrame(() => card.classList.add("show"));
+      startAuto();
+    }
+
+    function restart(){
+      animateTo(0);
+    }
+
+    startBtn.addEventListener("click", startShow);
+
+    window.addEventListener("keydown", (e) => {
+      if(slideView.classList.contains("hidden")) return;
+      if(e.key === "ArrowRight") nextBtn.click();
+      if(e.key === "ArrowLeft") prevBtn.click();
+    });
+  </script>
+</body>
+</html>

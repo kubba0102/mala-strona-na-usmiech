@@ -56,7 +56,6 @@
       letter-spacing:.2px;
       font-weight: 850;
     }
-
     .card{
       width:min(560px, 92vw);
       background: var(--card);
@@ -128,7 +127,6 @@
       cursor:not-allowed;
     }
 
-    /* STICKER pod prostokątem */
     .stickerWrap{
       display:none;
       width: 180px;
@@ -182,7 +180,6 @@
         <p class="text" id="text"></p>
       </div>
 
-      <!-- Sticker (zmieniamy src zależnie od slajdu) -->
       <div class="stickerWrap" id="stickerWrap" aria-label="Sticker">
         <img class="stickerImg" id="stickerImg" src="" alt="Obrazek">
       </div>
@@ -205,15 +202,14 @@
   <script>
     const AUTO_SECONDS = 8;
 
-    // sticker: podaj nazwę pliku PNG w folderze
     const SLIDES = [
       { title: "Werka", text: "Kilka zdań, żebyś mogła zacząć dzień z uśmiechem na twarzy." },
-      { title: "", text: "Choć dziś mówi się o zakochanych, miłość ma znacznie więcej niż jedną definicję…" },
+      { title: "", text: "Choć dziś mówi się o zakochanych, miłość ma znacznie więcej niż jedną definicję." },
 
       // TU: misie_bez_tla.png
       {
         title: "",
-        text: "Dlatego walentynki są dla wszystkich, którzy kogoś mają w sercu.\nNiezależnie od formy tej miłości.",
+        text: "Dlatego walentynki są dla wszystkich, którzy mają kogoś w sercu.\nNiezależnie od formy tej miłości.",
         sticker: "misie_bez_tla.png"
       },
 
@@ -351,3 +347,4 @@
   </script>
 </body>
 </html>
+

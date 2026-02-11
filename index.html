@@ -194,7 +194,8 @@
       </div>
 
       <div class="finalNote" id="finalNote">
-        Gratulacje za dotarcie do końca, teraz oficjalnie możesz pomyśleć <em>"ale on jest głupi"</em>😜\n<b>© 2026 — wersja limitowana: 1 sztuka</b>
+        Dotarłaś do końca, teraz oficjalnie możesz pomyśleć <em>"ale on jest głupi"</em> 😜
+		  \n <b>© 2026</b>
       </div>
     </div>
   </div>
@@ -206,7 +207,6 @@
       { title: "Werka", text: "Kilka zdań, żebyś mogła zacząć dzień z uśmiechem na twarzy" },
       { title: "", text: "Choć dziś mówi się o zakochanych, miłość ma znacznie więcej niż jedną definicję." },
 
-      // TU: misie_bez_tla.png
       {
         title: "",
         text: "Dlatego walentynki są dla wszystkich, którzy mają kogoś w sercu.\nNiezależnie od formy tej miłości.",
@@ -217,7 +217,7 @@
 
       {
         title: "",
-        text: "W każdej relacji można próbować się oddalić, ale niektóre więzi nie znikają z byle powodu.",
+        text: "W każdej relacji można próbować się oddalić,\nale nie każda więź gaśnie z byle powodu.",
         sticker: "misie_wyciete_bez_tla.png"
       },
 
@@ -231,7 +231,7 @@
 	  sticker: "mis_z_fioletu_bez_tla.png"
 	  },
 
-      { title: "Dziękuję", text: "Dlatego dziękuję Weroniko, że jesteś ❤️\nTylko tyle i aż tyle.", isFinal: true }
+      { title: "Dziękuję", text: "Dlatego dziękuję, że jesteś ❤️\nTylko tyle i aż tyle.", isFinal: true }
     ];
 
     const startView = document.getElementById("startView");
@@ -289,7 +289,6 @@
         stickerWrap.classList.remove("show");
       }
 
-      // GIF + notka tylko na końcu
       bear.classList.toggle("show", isLast);
       finalNote.classList.toggle("show", isLast);
 
@@ -348,5 +347,6 @@
   </script>
 </body>
 </html>
+
 
 
